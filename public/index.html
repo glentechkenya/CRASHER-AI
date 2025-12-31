@@ -9,17 +9,29 @@
 
 <body>
 
-<header>
-  <h1>CRASHER</h1>
-  <div class="menu">≡</div>
-</header>
+<div id="app">
 
-<main id="chat"></main>
+  <header>
+    <h1>CRASHER</h1>
+    <button id="menuBtn">≡</button>
+  </header>
 
-<footer>
-  <input id="input" placeholder="Speak." />
-  <button id="send">➤</button>
-</footer>
+  <!-- SLIDE MENU -->
+  <nav id="menu">
+    <p>CRASHER</p>
+    <button onclick="downloadApp()">Download App</button>
+    <button onclick="resetChat()">Reset Chat</button>
+    <button onclick="toggleMenu()">Close</button>
+  </nav>
+
+  <section id="chat"></section>
+
+  <footer>
+    <input id="input" placeholder="Speak." />
+    <button id="sendBtn">➤</button>
+  </footer>
+
+</div>
 
 <div class="brand">Glentech Kenya © 2025</div>
 
