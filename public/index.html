@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRASHER</title>
+<link rel="manifest" href="manifest.json">
+
+<style>
+:root {
+  --glass: rgba(255,255,255,0.08);
+  --blue: #00ccff;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at top, #071b33, #01040a);
+  font-family: "Segoe UI", sans-serif;
+  color: white;
+}
+
+/* TOP BAR */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  background: var(--glass);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid #00ccff33;
+}
+
+header h1 {
+  font-size: 18px;
+  letter-spacing: 2px;
+}
+
+header button {
+  background: transparent;
+  border: 1px solid var(--blue);
+  color: var(--blue);
+  padding: 6px 14px;
+  border-radius: 20px;
+}
+
+/* CHAT */
+#chat {
+  padding: 15px;
+  height: calc(100vh - 160px);
+  overflow-y: auto;
+}
+
+.msg {
+  max-width: 85%;
+  margin-bottom: 12px;
+  padding: 12px;
+  border-radius: 14px;
+  background: var(--glass);
+  backdrop-filter: blur(10px);
+}
+
+.user {
+  margin-left: auto;
+  border: 1px solid #00ccff44;
+}
+
+.ai {
+  margin-right: auto;
+}
+
+/* TYPING DOTS */
+.dots span {
+  animation: blink 1.4s infinite both;
+}
+.dots span:nth-child(2) { animation-delay: .2s }
+.dots span:nth-child(3) { animation-delay: .4s }
+
+@keyframes blink {
+  0% { opacity: .2 }
+  20% { opacity: 1 }
+  100% { opacity: .2 }
+}
+
+/* INPUT */
+footer {
+  padding: 12px;
+  background: var(--glass);
+  backdrop-filter: blur(18px);
+}
+
+input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  background: rgba(255,255,255,0.05);
+  color: white;
+}
+
+/* COPY BUTTON */
+.copy {
+  font-size: 12px;
+  margin-top: 6px;
+  color: var(--blue);
+  cursor: pointer;
+}
+
+/* BRAND */
+.brand {
+  text-align: center;
+  font-size: 11px;
+  color: #7aaacc;
+  margin-top: 6px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>CRASHER</h1>
+  <button onclick="alert('APK coming soon')">⬇</button>
+</header>
+
+<div id="chat"></div>
+
+<footer>
+  <input id="input" placeholder="Talk to Crasher..." />
+</footer>
+
+<div class="brand">
+  by Glentech Kenya © 2025
+</div>
+
+<script>
+const chat = document.getElementById("chat");
+const input = document.getElementById("input");
+
+function add(text, cls, copy=false) {
+  const div = document.createElement("div");
+  div.className = "msg " + cls;
+  div.innerHTML = text;
+  if (copy) {
+    const c = document.createElement("div");
+    c.className = "copy";
+    c.innerText = "Copy";
+    c.onclick = () => navigator.clipboard.writeText(text);
+    div.appendChild(c);
+  }
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+input.addEventListener("keydown", async e => {
+  if (e.key !== "Enter") return;
+
+  const text = input.value;
+  if (!text) return;
+  input.value = "";
+
+  add(text, "user");
+
+  // typing dots
+  const typing = document.createElement("div");
+  typing.className = "msg ai dots";
+  typing.innerHTML = "<span>.</span><span>.</span><span>.</span>";
+  chat.appendChild(typing);
+  chat.scrollTop = chat.scrollHeight;
+
+  const res = await fetch("/core/chat", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ prompt: text })
+  });
+
+  const data = await res.json();
+  typing.remove();
+
+  const isCode = data.reply.includes("```");
+  add(data.reply.replace(/```/g,""), "ai", isCode);
+});
+</script>
+
+</body>
+</html>
