@@ -1,0 +1,9 @@
+{
+  "name": "CRASHER AI",
+  "short_name": "CRASHER",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#020814",
+  "theme_color": "#00ccff",
+  "icons": []
+}
