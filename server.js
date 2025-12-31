@@ -13,7 +13,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
 
-app.post("/core/chat", async (req, res) => {
+app.post("/crasher/chat", async (req, res) => {
   try {
     const prompt = req.body.prompt;
 
@@ -33,7 +33,7 @@ app.post("/core/chat", async (req, res) => {
     res.json({ reply: data.choices[0].message.content });
 
   } catch {
-    res.status(500).json({ error: "CRASHER core failure" });
+    res.status(500).json({ error: "Crasher core error" });
   }
 });
 
@@ -42,5 +42,5 @@ app.get("*", (_, res) => {
 });
 
 app.listen(process.env.PORT || 3000, () =>
-  console.log("⚡ CRASHER AI ONLINE")
+  console.log("⚡ CRASHER ONLINE")
 );
