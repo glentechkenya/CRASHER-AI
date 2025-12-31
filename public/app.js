@@ -1,53 +1,68 @@
 const chat = document.getElementById("chat");
 const input = document.getElementById("input");
-const sendBtn = document.getElementById("send");
+const sendBtn = document.getElementById("sendBtn");
+const menu = document.getElementById("menu");
+const menuBtn = document.getElementById("menuBtn");
 
-function addMessage(html, cls) {
-  const div = document.createElement("div");
-  div.className = `card ${cls}`;
-  div.innerHTML = html;
-  chat.appendChild(div);
-  chat.scrollTop = chat.scrollHeight;
-  return div;
+let memory = [];
+
+function toggleMenu(){
+  menu.classList.toggle("open");
 }
 
-async function sendMessage() {
-  const text = input.value.trim();
-  if (!text) return;
+menuBtn.onclick = toggleMenu;
 
-  input.value = "";
-  addMessage(text, "user");
+function addMessage(text, cls){
+  const d=document.createElement("div");
+  d.className=`card ${cls}`;
+  d.innerHTML=text;
+  chat.appendChild(d);
+  chat.scrollTop=chat.scrollHeight;
+  return d;
+}
 
-  const typing = addMessage(
+async function send(){
+  const text=input.value.trim();
+  if(!text) return;
+  input.value="";
+
+  memory.push({role:"user",content:text});
+  addMessage(text,"user");
+
+  const typing=addMessage(
     `<div class="dots"><span>.</span><span>.</span><span>.</span></div>`,
     "ai"
   );
 
-  try {
-    const res = await fetch("/crasher/chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: text })
+  try{
+    const r=await fetch("/crasher/chat",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({prompt:text, memory})
     });
 
-    const data = await res.json();
+    const j=await r.json();
     typing.remove();
 
-    const reply = (data.reply || "…").replace(
-      /```([\s\S]*?)```/g,
-      (_, code) =>
-        `<pre><div class="copy" onclick="navigator.clipboard.writeText(\`${code}\`)">Copy</div>${code}</pre>`
-    );
-
-    addMessage(reply, "ai");
-
-  } catch {
+    memory.push({role:"assistant",content:j.reply});
+    addMessage(j.reply,"ai");
+  }catch{
     typing.remove();
-    addMessage("Connection error.", "ai");
+    addMessage("Connection error.","ai");
   }
 }
 
-sendBtn.onclick = sendMessage;
-input.addEventListener("keydown", e => {
-  if (e.key === "Enter") sendMessage();
+sendBtn.onclick=send;
+input.addEventListener("keydown",e=>{
+  if(e.key==="Enter") send();
 });
+
+function resetChat(){
+  chat.innerHTML="";
+  memory=[];
+  toggleMenu();
+}
+
+function downloadApp(){
+  alert("APK build coming next step");
+}
