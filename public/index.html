@@ -1,51 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>CRASHER</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<link rel="stylesheet" href="style.css" />
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#8fdcff">
+  <title>CRASHER AI</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#8fdcff" />
 
 </head>
 <body>
+  <h1>CRASHER AI</h1>
+  <p>Dark cyber luxury AI by Glentech Kenya © 2026</p>
 
-<div id="app">
+  <!-- PWA install hint -->
+  <p>If install prompt appears, add to home screen.</p>
 
-  <!-- HEADER -->
-  <header>
-    <div>
-      <strong>CRASHER</strong><br>
-      <small>Made by Glentech Kenya © 2026</small>
-    </div>
-
-    <button id="menuBtn" type="button">≡</button>
-  </header>
-
-  <!-- SLIDE MENU -->
-  <aside id="menu">
-    <h3>Menu</h3>
-    <button type="button" onclick="resetChat()">Reset Chat</button>
-    <button type="button" onclick="downloadApp()">Download App</button>
-    <button type="button" onclick="toggleMenu()">Close</button>
-  </aside>
-
-  <!-- CHAT -->
-  <main id="chat"></main>
-
-  <!-- FOOTER -->
-  <footer>
-    <button id="micBtn" type="button">🎤</button>
-    <input id="input" placeholder="Type or speak..." />
-    <button id="uploadBtn" type="button">＋</button>
-    <button id="sendBtn" type="button">➤</button>
-    <input type="file" id="fileInput" hidden>
-  </footer>
-
-</div>
-
-<script src="app.js"></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/sw.js");
+    }
+  </script>
 </body>
 </html>
