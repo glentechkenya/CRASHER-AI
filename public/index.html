@@ -4,33 +4,48 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>CRASHER</title>
-<link rel="stylesheet" href="style.css" />
-</head>
 
+<link rel="stylesheet" href="style.css" />
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#8fdcff">
+
+</head>
 <body>
 
 <div id="app">
 
+  <!-- HEADER -->
   <header>
-    <h1>CRASHER</h1>
-    <button id="menuBtn">≡</button>
+    <div>
+      <strong>CRASHER</strong><br>
+      <small>Made by Glentech Kenya © 2026</small>
+    </div>
+
+    <button id="menuBtn" type="button">≡</button>
   </header>
 
   <!-- SLIDE MENU -->
-  <nav id="menu">
-    <p>CRASHER</p>
-    <button onclick="downloadApp()">Download App</button>
-    <button onclick="resetChat()">Reset Chat</button>
-    <button onclick="toggleMenu()">Close</button>
-  </nav>
+  <aside id="menu">
+    <h3>Menu</h3>
+    <button type="button" onclick="resetChat()">Reset Chat</button>
+    <button type="button" onclick="downloadApp()">Download App</button>
+    <button type="button" onclick="toggleMenu()">Close</button>
+  </aside>
 
-  <section id="chat"></section>
+  <!-- CHAT -->
+  <main id="chat"></main>
 
+  <!-- FOOTER -->
   <footer>
-    <input id="input" placeholder="Speak." />
-    <button id="sendBtn">➤</button>
+    <button id="micBtn" type="button">🎤</button>
+    <input id="input" placeholder="Type or speak..." />
+    <button id="uploadBtn" type="button">＋</button>
+    <button id="sendBtn" type="button">➤</button>
+    <input type="file" id="fileInput" hidden>
   </footer>
 
 </div>
 
-<div class="brand">Glentech Kenya © 2025</div>
+<script src="app.js"></script>
+</body>
+</html>
