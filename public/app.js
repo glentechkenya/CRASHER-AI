@@ -5,7 +5,7 @@ const typing = document.getElementById("typing");
 function add(text, cls){
   const div=document.createElement("div");
   div.className="bubble "+cls;
-  div.innerHTML=text.replace(/```([\\s\\S]*?)```/g,
+  div.innerHTML=text.replace(/```([\s\S]*?)```/g,
     (_,c)=>`<pre><code>${c.replace(/</g,"&lt;")}</code></pre>`);
   chat.appendChild(div);
   chat.scrollTop=chat.scrollHeight;
