@@ -15,39 +15,41 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-/* ✅ SERVE FRONTEND */
+/* SERVE FRONTEND */
 app.use(express.static(path.join(__dirname, "public")));
 
-/* ✅ FORCE HOME PAGE */
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-/* ✅ AI ENDPOINT */
+/* AI CHAT */
 app.post("/api/chat", async (req, res) => {
   try {
-    const userMessage = req.body.message;
-
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        messages: [{ role: "user", content: userMessage }]
-      })
-    });
+    const response = await fetch(
+      "https://api.openai.com/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
+        },
+        body: JSON.stringify({
+          model: "gpt-4o-mini",
+          messages: [{ role: "user", content: req.body.message }]
+        })
+      }
+    );
 
     const data = await response.json();
     res.json({ reply: data.choices[0].message.content });
 
-  } catch (err) {
+  } catch (e) {
     res.status(500).json({ reply: "AI error" });
   }
 });
 
-app.listen(3000, () => {
-  console.log("Crusher AI LIVE");
+/* 🔥 THIS IS THE FIX */
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log("Crusher AI LIVE on port " + PORT);
 });
