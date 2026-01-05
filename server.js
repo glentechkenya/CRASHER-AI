@@ -14,15 +14,12 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-
-/* SERVE FRONTEND */
 app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-/* AI CHAT */
 app.post("/api/chat", async (req, res) => {
   try {
     const response = await fetch(
@@ -31,24 +28,22 @@ app.post("/api/chat", async (req, res) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
         },
         body: JSON.stringify({
           model: "gpt-4o-mini",
-          messages: [{ role: "user", content: req.body.message }]
-        })
+          messages: [{ role: "user", content: req.body.message }],
+        }),
       }
     );
 
     const data = await response.json();
     res.json({ reply: data.choices[0].message.content });
-
   } catch (e) {
     res.status(500).json({ reply: "AI error" });
   }
 });
 
-/* 🔥 THIS IS THE FIX */
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log("Crusher AI LIVE on port " + PORT);
